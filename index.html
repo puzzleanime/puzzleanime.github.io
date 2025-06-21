@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>~ pastel calculator ~</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Caprasimo&family=VT323&family=Darumadrop+One&display=swap');
+    @font-face {
+      font-family: 'DS-Digital';
+      src: url('https://fonts.cdnfonts.com/s/12674/DS-Digital.woff') format('woff');
+    }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'Caprasimo', cursive;
+      background: url(school.jpg) no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .calculator {
+      background: #b3e5fc;
+      border: 2px solid #81d4fa;
+      border-radius: 20px;
+      padding: 15px;
+      width: 95vw;
+      max-width: 400px;
+      max-height: 95vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 0 0 transparent;
+    }
+
+    .display {
+      background: #000;
+      color: #0f0;
+      font-family: 'VT323', monospace;
+      font-size: 30px;
+      padding: 10px;
+      border: 2px solid #81d4fa;
+      border-radius: 10px;
+      text-align: right;
+      min-height: 40px;
+      margin-bottom: 10px;
+    }
+
+    .keys {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      flex-grow: 1;
+    }
+
+    button {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      border: 2px solid #81d4fa;
+      border-radius: 50%;
+      font-family: 'Darumadrop One', cursive;
+      font-size: 22px;
+      cursor: pointer;
+      color: #000;
+      transition: transform 0.2s;
+    }
+
+    button:hover {
+      transform: scale(1.1);
+    }
+
+    .pink { background: linear-gradient(45deg, #ffcccb, #ffd1dc); }
+    .lavender { background: linear-gradient(45deg, #e6e6fa, #d8bfd8); }
+    .yellow { background: linear-gradient(45deg, #fff9c4, #fff59d); }
+    .green { background: linear-gradient(45deg, #c8e6c9, #a5d6a7); }
+    .orange { background: linear-gradient(45deg, #ffe0b2, #ffcc80); }
+    .equals { background: linear-gradient(45deg, #ffe0b2, #ffcc80); font-size: 22px; }
+  </style>
+</head>
+<body>
+  <div class="calculator">
+    <div class="display" id="result">0</div>
+    <div class="keys">
+      <button class="lavender" onclick="playClick(); clearDisplay()">C</button>
+      <button class="lavender" onclick="playClick(); memoryClear()">MC</button>
+      <button class="lavender" onclick="playClick(); memoryRecall()">MR</button>
+      <button class="lavender" onclick="playClick(); updateDisplay('%')">%</button>
+
+      <button class="pink" onclick="playClick(); updateDisplay('7')">7</button>
+      <button class="pink" onclick="playClick(); updateDisplay('8')">8</button>
+      <button class="pink" onclick="playClick(); updateDisplay('9')">9</button>
+      <button class="lavender" onclick="playClick(); updateDisplay('/')">÷</button>
+
+      <button class="yellow" onclick="playClick(); updateDisplay('4')">4</button>
+      <button class="yellow" onclick="playClick(); updateDisplay('5')">5</button>
+      <button class="yellow" onclick="playClick(); updateDisplay('6')">6</button>
+      <button class="lavender" onclick="playClick(); updateDisplay('*')">×</button>
+
+      <button class="green" onclick="playClick(); updateDisplay('1')">1</button>
+      <button class="green" onclick="playClick(); updateDisplay('2')">2</button>
+      <button class="green" onclick="playClick(); updateDisplay('3')">3</button>
+      <button class="lavender" onclick="playClick(); updateDisplay('-')">−</button>
+
+      <button class="pink" onclick="playClick(); updateDisplay('0')">0</button>
+      <button class="lavender" onclick="playClick(); updateDisplay('.')">.</button>
+      <button class="orange equals" onclick="playClick(); calculate()">=</button>
+      <button class="lavender" onclick="playClick(); updateDisplay('+')">+</button>
+
+      <button class="lavender" onclick="playClick(); memoryAdd()">M+</button>
+      <button class="lavender" onclick="playClick(); memorySubtract()">M−</button>
+    </div>
+  </div>
+
+  <audio id="clickSound" src="https://www.soundjay.com/buttons/spacebar-click-keyboard-199448.mp3" type="audio/mpeg"></audio>
+  <script>
+    const clickSound = document.getElementById('clickSound');
+    const display = document.getElementById('result');
+    let current = '0';
+    let memory = 0;
+
+    function playClick() {
+      clickSound.currentTime = 0;
+      clickSound.play();
+    }
+
+    function updateDisplay(value) {
+      if (current === '0' && value !== '.') current = '';
+      current += value;
+      display.textContent = current;
+    }
+
+    function calculate() {
+      try {
+        current = eval(current).toString();
+        display.textContent = current;
+      } catch {
+        display.textContent = 'Error';
+        current = '0';
+      }
+    }
+
+    function clearDisplay() {
+      current = '0';
+      display.textContent = current;
+    }
+
+    function memoryAdd() {
+      memory += parseFloat(current) || 0;
+      current = '0';
+      display.textContent = current;
+    }
+
+    function memorySubtract() {
+      memory -= parseFloat(current) || 0;
+      current = '0';
+      display.textContent = current;
+    }
+
+    function memoryRecall() {
+      current = memory.toString();
+      display.textContent = current;
+    }
+
+    function memoryClear() {
+      memory = 0;
+    }
+  </script>
+</body>
+</html>
