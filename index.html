@@ -4,79 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>English to Spanish Translator</title>
-    <!-- Tailwind CSS for styling -->
+    <link rel="icon" type="image/png" href="https://icons.iconarchive.com/icons/marcus-roberto/google-play/512/Google-Translate-icon.png">
+    
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Inter -->
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        /* Custom styles to complement Tailwind */
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(to right top, #f3e7e9, #e3eeff);
-        }
-        /* Style for the loading spinner */
-        .loader {
-            border: 4px solid rgba(255, 255, 255, 0.3);
-            border-top: 4px solid #ffffff;
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        /* Additional styling for a more polished look */
-        .main-container {
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            background-color: rgba(255, 255, 255, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        textarea {
-            transition: all 0.3s ease-in-out;
-        }
-        textarea:focus {
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
-        }
-        .speaker-btn {
-            transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
-        }
-        .speaker-btn:hover {
-            background-color: #e5e7eb; /* gray-200 */
-            transform: scale(1.1);
-        }
-    </style>
+    
+    <link rel="stylesheet" href="style.css">
+
 </head>
 <body class="flex items-center justify-center min-h-screen p-4">
 
     <div class="w-full max-w-4xl main-container rounded-2xl shadow-xl p-6 md:p-8">
-        
-        <!-- Header Section -->
         <div class="text-center mb-8">
             <h1 class="text-3xl md:text-4xl font-bold text-gray-800">English to Spanish Translator</h1>
             <p class="text-gray-600 mt-2">Translate and Listen</p>
         </div>
 
-        <!-- Translator Interface -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- English Input -->
             <div>
                 <label for="english-text" class="block text-sm font-medium text-gray-700 mb-2">English</label>
                 <textarea id="english-text" rows="8" class="w-full p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Enter English text here..."></textarea>
             </div>
-            <!-- Spanish Output -->
             <div>
                 <div class="flex justify-between items-center mb-2">
                     <label for="spanish-text" class="block text-sm font-medium text-gray-700">Spanish</label>
                     <button id="speaker-btn" class="speaker-btn p-2 rounded-full" title="Listen to translation">
-                        <!-- Speaker Icon SVG -->
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600" viewBox="0 0 20 20" fill="currentColor">
-                          <path fill-rule="evenodd" d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM12.293 7.293a1 1 0 011.414 0L15 8.586l1.293-1.293a1 1 0 111.414 1.414L16.414 10l1.293 1.293a1 1 0 01-1.414 1.414L15 11.414l-1.293 1.293a1 1 0 01-1.414-1.414L13.586 10l-1.293-1.293a1 1 0 010-1.414z" clip-rule="evenodd" />
-                          <path d="M11 5.054a7.5 7.5 0 015.84 6.477 1 1 0 00.999.969A9.5 9.5 0 0011 3.003V5.054z" />
+                          <path d="M10 1.25a.75.75 0 00-1.06-.625l-5.25 3.5A.75.75 0 003 5v10a.75.75 0 00.69.75l5.25 3.5a.75.75 0 001.06-.625V1.25zM12.25 5a.75.75 0 01.75.75v8.5a.75.75 0 01-1.5 0V5.75a.75.75 0 01.75-.75zM15 6.25a.75.75 0 01.75.75v6.5a.75.75 0 01-1.5 0V7a.75.75 0 01.75-.75z" />
                         </svg>
                     </button>
                 </div>
@@ -84,7 +41,6 @@
             </div>
         </div>
 
-        <!-- Action Button -->
         <div class="mt-6 text-center">
             <button id="translate-btn" class="w-full md:w-auto bg-blue-600 text-white font-semibold py-3 px-8 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 transition-transform transform hover:scale-105 duration-300 ease-in-out flex items-center justify-center mx-auto">
                 <span id="btn-text">Translate</span>
@@ -92,9 +48,7 @@
             </button>
         </div>
         
-        <!-- Message Box for errors or info -->
         <div id="message-box" class="mt-4 text-center text-red-600 font-medium h-5"></div>
-
     </div>
 
     <script>
@@ -127,9 +81,8 @@
             }
 
             setLoading(true);
-
             try {
-                const prompt = `Translate the following English text to Spanish: "${englishText}"`;
+                const prompt = `Translate the following English text to Spanish. Provide only the Spanish translation and nothing else: "${englishText}"`;
                 const translatedText = await callGemini(prompt);
 
                 if (translatedText) {
@@ -140,7 +93,12 @@
 
             } catch (error) {
                 console.error('Translation Error:', error);
-                messageBox.textContent = 'An error occurred. Please try again.';
+                // Check if the error is due to a missing API key
+                if (error.message.includes('API key not valid')) {
+                     messageBox.textContent = 'API key is invalid or missing. Please check the code.';
+                } else {
+                     messageBox.textContent = 'An error occurred. Please try again.';
+                }
             } finally {
                 setLoading(false);
             }
@@ -158,17 +116,11 @@
                 return;
             }
             
-            // Check if the browser supports the Speech Synthesis API
             if ('speechSynthesis' in window) {
-                // Cancel any previously queued speech
                 window.speechSynthesis.cancel();
-
                 const utterance = new SpeechSynthesisUtterance(textToSpeak);
-                // Set the language to Spanish
                 utterance.lang = 'es-ES'; 
-                utterance.rate = 0.9; // Slightly slower for clarity
-                
-                // Speak the text
+                utterance.rate = 0.9; 
                 window.speechSynthesis.speak(utterance);
             } else {
                 messageBox.textContent = 'Sorry, your browser does not support text-to-speech.';
@@ -177,14 +129,12 @@
         
         /**
          * Calls the Gemini API to get the translation.
-         * Implements exponential backoff for retries.
-         * @param {string} prompt - The prompt to send to the model.
-         * @returns {Promise<string|null>} The translated text or null on failure.
          */
         async function callGemini(prompt) {
-            const apiKey = ""; // API key is handled by the environment
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
-            
+            // CRITICAL: You must replace this with your own API key.
+            const apiKey = "YOUR_API_KEY_HERE"; 
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
+
             const payload = {
                 contents: [{ role: "user", parts: [{ text: prompt }] }]
             };
@@ -200,12 +150,20 @@
                         body: JSON.stringify(payload)
                     });
 
-                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    if (!response.ok) {
+                        if (response.status === 400) {
+                            const errorData = await response.json();
+                            if (errorData.error?.message.includes('API key not valid')) {
+                                throw new Error('API key not valid. Please pass a valid API key.');
+                            }
+                        }
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
 
                     const result = await response.json();
                     
                     if (result.candidates?.[0]?.content?.parts?.[0]?.text) {
-                        return result.candidates[0].content.parts[0].text.trim();
+                        return result.candidates[0].content.parts[0].text.trim().replace(/^"|"$/g, '');
                     } else {
                         console.error("Unexpected API response structure:", result);
                         throw new Error("Invalid response structure from API.");
@@ -224,7 +182,6 @@
 
         /**
          * Toggles the loading state of the translate button.
-         * @param {boolean} isLoading - True to show loader, false to hide.
          */
         function setLoading(isLoading) {
             translateButton.disabled = isLoading;
