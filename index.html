@@ -15,44 +15,45 @@
     <link rel="stylesheet" href="style.css">
 
 </head>
-<body class="flex items-center justify-center min-h-screen p-4">
+<body>
 
-    <div class="w-full max-w-4xl main-container rounded-2xl shadow-xl p-6 md:p-8">
-        <div class="text-center mb-8">
-            <h1 class="text-3xl md:text-4xl font-bold text-gray-800">English to Spanish Translator</h1>
-            <p class="text-gray-600 mt-2">Translate and Listen</p>
+    <div class="main-container rounded-2xl shadow-xl p-6 md:p-8">
+        <div class="text-center mb-8 header-section">
+            <h1 class="text-3xl md:text-4xl font-bold">English to Spanish Translator</h1>
+            <p class="mt-2">Translate and Listen</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-                <label for="english-text" class="block text-sm font-medium text-gray-700 mb-2">English</label>
-                <textarea id="english-text" rows="8" class="w-full p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Enter English text here..."></textarea>
+                <label for="english-text" class="block text-sm font-medium mb-2">English</label>
+                <textarea id="english-text" rows="8" class="w-full p-4 rounded-lg" placeholder="Enter English text here..."></textarea>
             </div>
             <div>
                 <div class="flex justify-between items-center mb-2">
-                    <label for="spanish-text" class="block text-sm font-medium text-gray-700">Spanish</label>
+                    <label for="spanish-text" class="block text-sm font-medium">Spanish</label>
                     <button id="speaker-btn" class="speaker-btn p-2 rounded-full" title="Listen to translation">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600" viewBox="0 0 20 20" fill="currentColor">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                           <path d="M10 1.25a.75.75 0 00-1.06-.625l-5.25 3.5A.75.75 0 003 5v10a.75.75 0 00.69.75l5.25 3.5a.75.75 0 001.06-.625V1.25zM12.25 5a.75.75 0 01.75.75v8.5a.75.75 0 01-1.5 0V5.75a.75.75 0 01.75-.75zM15 6.25a.75.75 0 01.75.75v6.5a.75.75 0 01-1.5 0V7a.75.75 0 01.75-.75z" />
                         </svg>
                     </button>
                 </div>
-                <textarea id="spanish-text" rows="8" class="w-full p-4 border border-gray-300 rounded-lg bg-gray-50 focus:ring-2 focus:ring-gray-400 focus:border-gray-400" placeholder="Translation will appear here..." readonly></textarea>
+                <textarea id="spanish-text" rows="8" class="w-full p-4 rounded-lg" placeholder="Translation will appear here..." readonly></textarea>
             </div>
         </div>
 
-        <div class="mt-6 text-center">
-            <button id="translate-btn" class="w-full md:w-auto bg-blue-600 text-white font-semibold py-3 px-8 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 transition-transform transform hover:scale-105 duration-300 ease-in-out flex items-center justify-center mx-auto">
+        <div class="mt-8 text-center">
+            <button id="translate-btn" class="w-full md:w-auto font-semibold py-3 px-8 rounded-lg flex items-center justify-center mx-auto">
                 <span id="btn-text">Translate</span>
                 <div id="loader" class="loader hidden ml-3"></div>
             </button>
         </div>
         
-        <div id="message-box" class="mt-4 text-center text-red-600 font-medium h-5"></div>
+        <div id="message-box" class="mt-4 text-center font-medium h-5"></div>
     </div>
 
     <script>
-        // DOM element references
+        // All the previous JavaScript code goes here.
+        // It does not need to be changed.
         const englishTextarea = document.getElementById('english-text');
         const spanishTextarea = document.getElementById('spanish-text');
         const translateButton = document.getElementById('translate-btn');
@@ -61,39 +62,28 @@
         const loader = document.getElementById('loader');
         const btnText = document.getElementById('btn-text');
 
-        // --- Event Listeners ---
         translateButton.addEventListener('click', handleTranslation);
         speakerButton.addEventListener('click', handleSpeak);
 
-        /**
-         * Main function to handle the translation process.
-         */
         async function handleTranslation() {
             const englishText = englishTextarea.value.trim();
-            
-            // Clear previous results and messages
             spanishTextarea.value = '';
             messageBox.textContent = '';
-
             if (!englishText) {
                 messageBox.textContent = 'Please enter some English text to translate.';
                 return;
             }
-
             setLoading(true);
             try {
                 const prompt = `Translate the following English text to Spanish. Provide only the Spanish translation and nothing else: "${englishText}"`;
                 const translatedText = await callGemini(prompt);
-
                 if (translatedText) {
                     spanishTextarea.value = translatedText;
                 } else {
                     messageBox.textContent = 'Sorry, the translation could not be completed.';
                 }
-
             } catch (error) {
                 console.error('Translation Error:', error);
-                // Check if the error is due to a missing API key
                 if (error.message.includes('API key not valid')) {
                      messageBox.textContent = 'API key is invalid or missing. Please check the code.';
                 } else {
@@ -104,18 +94,13 @@
             }
         }
 
-        /**
-         * Handles the text-to-speech functionality.
-         */
         function handleSpeak() {
             const textToSpeak = spanishTextarea.value;
             messageBox.textContent = '';
-
             if (!textToSpeak) {
                 messageBox.textContent = 'There is nothing to listen to.';
                 return;
             }
-            
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel();
                 const utterance = new SpeechSynthesisUtterance(textToSpeak);
@@ -127,21 +112,12 @@
             }
         }
         
-        /**
-         * Calls the Gemini API to get the translation.
-         */
         async function callGemini(prompt) {
-            // CRITICAL: You must replace this with your own API key.
-            const apiKey = "YOUR_API_KEY_HERE"; 
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
-
-            const payload = {
-                contents: [{ role: "user", parts: [{ text: prompt }] }]
-            };
-
+            const apiKey = "AIzaSyAHVLc5ZwtpD_M3E28eoKM7gGtZjb74qV8"; 
+            const apiUrl = `https://generativelace.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
+            const payload = { contents: [{ role: "user", parts: [{ text: prompt }] }] };
             let retries = 3;
             let delay = 1000;
-
             while (retries > 0) {
                 try {
                     const response = await fetch(apiUrl, {
@@ -149,7 +125,6 @@
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(payload)
                     });
-
                     if (!response.ok) {
                         if (response.status === 400) {
                             const errorData = await response.json();
@@ -159,16 +134,13 @@
                         }
                         throw new Error(`HTTP error! status: ${response.status}`);
                     }
-
                     const result = await response.json();
-                    
                     if (result.candidates?.[0]?.content?.parts?.[0]?.text) {
                         return result.candidates[0].content.parts[0].text.trim().replace(/^"|"$/g, '');
                     } else {
                         console.error("Unexpected API response structure:", result);
                         throw new Error("Invalid response structure from API.");
                     }
-
                 } catch (error) {
                     console.error(`Attempt failed: ${error.message}`);
                     retries--;
@@ -180,9 +152,6 @@
             return null;
         }
 
-        /**
-         * Toggles the loading state of the translate button.
-         */
         function setLoading(isLoading) {
             translateButton.disabled = isLoading;
             if (isLoading) {
