@@ -1,0 +1,193 @@
+:root {
+    --bg-image: url('daywallpaper.jpg');
+    --text-color: #333;
+    --container-bg: #ffffff;
+    --border-color: #ccc;
+    --button-bg: #4a98e2;
+    --button-text: white;
+    --button-hover-bg: #2f68a1;
+    --theme-toggle-emoji: '☀️'; /* Default for light mode */
+}
+
+body.dark-mode {
+    --bg-image: url('nightbackground.gif');
+    --text-color: #e0e0e0;
+    --container-bg: #1e1e1e;
+    --border-color: #444;
+    --button-bg: #946eb3;
+    --button-text: white;
+    --button-hover-bg: rgb(99, 82, 138);
+    --theme-toggle-emoji: '🌙'; /* For dark mode */
+}
+
+/* FIX: Ensure screen is vertically centered and responsive */
+body {
+    font-family: 'Comfortaa', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-image: var(--bg-image);
+    background-size: cover;
+    background-position: center;
+    color: var(--text-color);
+    margin: 0;
+    transition: background-image 0.5s, color 0.3s;
+    /* FIX: Added to prevent content from touching edges on small screens */
+    padding: 10px; 
+    box-sizing: border-box;
+}
+
+.container {
+    background-color: var(--container-bg);
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* FIX: Added max-width for better control on large screens */
+    max-width: 90%; 
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: var(--text-color);
+}
+
+#puzzle-container {
+    display: grid;
+    gap: 5px;
+    border: 3px solid var(--border-color);
+    background-color: var(--border-color);
+    padding: 5px;
+    position: relative;
+    /* These properties are set by javascript to handle different modes */
+}
+
+.tile {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.2s ease-in-out;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.empty {
+    background-color: transparent !important;
+    background-image: none !important;
+    border: none;
+    cursor: default;
+}
+
+#controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.control-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+label {
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+select, button {
+    padding: 10px 15px;
+    font-size: 1em;
+    cursor: pointer;
+    border: none;
+    background-color: var(--button-bg);
+    color: var(--button-text);
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    font-family: inherit; /* Ensure buttons use Comfortaa */
+}
+
+button:hover, select:hover {
+    background-color: var(--button-hover-bg);
+}
+
+/* pop-up modal styling */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.7);
+    animation: fadein 0.5s;
+}
+
+.modal-content {
+    background-color: var(--container-bg);
+    margin: 15% auto;
+    padding: 2rem;
+    border: 1px solid var(--border-color);
+    width: 80%;
+    max-width: 400px;
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    position: relative;
+    transform: translateY(-50px);
+    animation: slideup 0.5s forwards;
+}
+
+.close-btn {
+    color: var(--text-color);
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+    color: var(--button-bg);
+    text-decoration: none;
+}
+
+/* FIX: Theme toggle button styling for emoji placement */
+.theme-toggle {
+    margin-top: 20px;
+    font-size: 1.5rem;
+    background: var(--button-bg);
+    color: var(--button-text);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    /* Center the emoji inside the button */
+    display: flex; 
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    /* Remove the default padding/text-align that conflicts with centering */
+    padding: 0; 
+    line-height: 1;
+}
+
+@keyframes fadein {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideup {
+    from { transform: translateY(50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
